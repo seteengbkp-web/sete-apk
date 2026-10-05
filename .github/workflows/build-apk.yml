@@ -103,6 +103,8 @@ jobs:
       - name: Atualizar o versao.json com a versão do app
         working-directory: .
         run: |
+          git fetch origin main
+          git checkout origin/main -- versao.json
           python3 - << 'PY'
           import json
           v = json.load(open('versao.json'))
@@ -119,4 +121,4 @@ jobs:
           git config user.email 'actions@github.com'
           git add SETE-Campo.apk versao.json
           git diff --cached --quiet && echo "Nada novo para publicar." || \
-            (git commit -m "APK ${{ steps.ver.outputs.tela }} (código ${{ steps.codigo.outputs.codigo }})" && git push)
+            (git commit -m "APK ${{ steps.ver.outputs.tela }} (código ${{ steps.codigo.outputs.codigo }})" && git pull --rebase origin main && git push)
